@@ -1,0 +1,44 @@
+target
+
+# maven related ignores
+target
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# general ignores
+*.bak
+*.log
+
+# java ignores
+*.class
+*.war
+*.ear
+*.bpr
+
+# sublime editor exludes
+*.sublime-workspace
+
+#Mac group
+.DS_Store
+
+##########################
+## Eclipse Java Projects
+##########################
+.metadata
+.classpath
+.settings/
+bin/
+build/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
