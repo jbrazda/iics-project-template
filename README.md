@@ -112,4 +112,4 @@ Regular update of previously deployed assets (Only hcim project)
 ## Other Links
 
 - [Automation to Build and Deploy IICS Design Packages](https://github.com/jbrazda/icai-ips-bundle/blob/master/doc/build.md)
-- [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+- [Learn Markdown](https://guides.github.com/features/mastering-markdown/)
