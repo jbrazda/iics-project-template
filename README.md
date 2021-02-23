@@ -64,7 +64,7 @@ Start with making sure you local repository up to date
 git pull --rebase
 ```
 
-This scrip will clean project target working directory and refresh sources while also removing any deleted assets from git repository
+This scrip will clean project target working directory and refresh sources  using a default project configuration while also removing any deleted assets from git repository
 
 ```shell
 ant clean.src -Diics.release=./conf/iics.release.properties
@@ -96,6 +96,7 @@ ant package.src \
 Regular update of previously deployed assets (Only hcim project)
 
 ```shell
+ant build.deploy \
 -Diics.release=./conf/iics.release.properties \
 -Diics.target.environment=prod \
 -Diics.target.package.config=./conf/all_exclude_connections.package.txt \
