@@ -1,0 +1,4 @@
+Explore/ProjectName/Connectors.Folder
+Explore/ProjectName/Processes.Folder
+Explore/ProjectName/Guides.Folder
+Explore/ProjectName/ProcessObjects.Folder

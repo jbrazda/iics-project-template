@@ -1,0 +1,1 @@
+Use the ./update_publish_all_config.sh command to generate/ update this file

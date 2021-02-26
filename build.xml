@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="IICS Build Script - Success Pack Bundle" default="help" basedir=".">
+<project name="IICS Build Script - TODO Update build name" default="help" basedir=".">
     <description>
             IICS Components Build Script
     </description>
@@ -43,7 +43,14 @@
         <condition property="shell.open" value=" open ">
             <os name="Mac OS X" />
         </condition>
-
+		
+    	<condition property="shell.open" value=" wslview ">
+    		<and> <!-- Detecting WSL Linux runtime to open urls in windows default browser in wsl runtime -->
+    			<os name="Linux"/>
+    			<contains string="${os.version}" substring="WSL" />
+    		</and>
+        </condition>
+    	
         <property name="shell.open" value="" />
 
         <condition property="shell.options" value="-c">
