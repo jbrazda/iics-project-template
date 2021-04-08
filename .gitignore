@@ -33,7 +33,6 @@ buildNumber.properties
 .metadata
 .classpath
 .settings/
-bin/
 build/
 tmp/
 *.tmp
