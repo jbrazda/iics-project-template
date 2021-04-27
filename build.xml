@@ -450,6 +450,11 @@
         </delete>
     </target>
 
+    <target name="clean.target" description="Cleans target directory in ${basedir}/target">
+        <echo level="info">Deleting ${basedir}/target</echo>
+        <delete dir="${basedir}/target" verbose="true"/>
+    </target>
+
     <target name="clean.src" depends="-load.release.properties" if="iics.release.basename" description="Cleans src in ${iics.extract.dir}">
         <echo level="info">Deleting ${iics.extract.dir}</echo>
         <delete dir="${iics.extract.dir}" verbose="true">
