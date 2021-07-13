@@ -1,0 +1,49 @@
+# This is a basic workflow that is manually triggered
+
+name: Manual Dev Snapshot
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      commitMessage:
+        # Custom commit message for commit snapshot
+        description: 'Commit Message'
+        # Default value if no value is explicitly provided
+        default: 'IICS Dev Environment Snapshot'
+        # Input has to be provided for the workflow to run
+        required: true
+
+jobs:
+  dev_commit_snapshot:
+  #  Export IICS Assets from the environment
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+      
+    - name: Export Project From Source Org
+      env:
+        IICS_TEST_TARGET_ENVIRONMENT: dev
+        IICS_TEST_EXPORT_PATH: ./target/iics/export/dev
+        IICS_TEST_EXPORT_FILE: CI-CD-Demo
+      run: |
+        ant update.src \
+        -Diics.user.dev="${{ secrets.IICS_DEV_ORG_USER }}" \
+        -Diics.password.dev="${{ secrets.IICS_DEV_ORG_PWD }}" \
+        -Diics.release=./conf/iics.release.properties \
+        -Diics.export.list.location=./conf/export_list.txt \
+        -Diics.source.environment=dev \
+        -Dtools.reporting.disabled=true
+    - name: Commit Changes
+      uses: actions-x/commit@v2
+      with:
+        message: ${{ github.event.inputs.commitMessage }}
+        branch: dev
+        files: .
