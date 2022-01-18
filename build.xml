@@ -158,7 +158,7 @@
         <echo level="info">IICS Tool Module Available: ${iics.available}</echo>
         <echo level="info">Reporting Module Available: ${tools.reporting.installed}</echo>
         <echo level="info">Tramsform Module Available: ${tools.transform.installed}</echo>
-    	<echo level="info">NZip Module Available:      ${tools.nzip.installed}</echo>
+    	<echo level="info">Nzip Module Available:      ${tools.nzip.installed}</echo>
         <echo level="info">========================================</echo>
         <property name="env.info.displayed" value="true" />
     </target>
@@ -209,6 +209,7 @@
     <target name="install.tools.transform" depends="-env.info" if="${tools.transform.install}">
         <echo level="info">Downloading: ${url.download.iics.tools.transform}</echo>
         <mkdir dir="${iics.tools.dir.transform}" />
+        <mkdir dir="${tools.download.dir}" />
         <get src="${url.download.iics.tools.transform}" dest="${tools.download.dir}" usetimestamp="true" />
         <unzip dest="${iics.tools.dir.transform}" src="${tools.download.dir}/${url.download.iics.tools.transform.archive}">
             <patternset>
@@ -223,6 +224,7 @@
 
         <echo level="info">Downloading: ${url.download.iics.tools.reporting}</echo>
         <mkdir dir="${iics.tools.dir.reporting}" />
+        <mkdir dir="${tools.download.dir}" />
         <get src="${url.download.iics.tools.reporting}" dest="${tools.download.dir}" usetimestamp="true" />
         <unzip dest="${iics.tools.dir.reporting}" src="${tools.download.dir}/${url.download.iics.tools.reporting.archive}">
             <mapper>
@@ -567,36 +569,44 @@
         <basename property="project.parent.dir" file="${project.dir}"/>
         <input defaultvalue="${project.parent.dir}" message="Provide IICS PojectName:" addproperty="iics.project.name"/>
     	<input defaultvalue="IICS_ClientName" message="Provide Client Name:" addproperty="iics.customer.name"/>
-        <echo file="${basedir}/conf/all_designs.package.txt">Explore/${iics.project.name}.Project</echo> 
+    	<input defaultvalue="${iics.external.properties.dir}/iics.properties" message="Provide location of the Credentials File:" addproperty="iics.local.properties"/>
+        
+          
+    	<echo file="${basedir}/conf/all_designs.package.txt">Explore/${iics.project.name}.Project</echo> 
+    	<echo level="info">Updated ${basedir}/conf/all_designs.package.txt</echo> 
         <echo file="${basedir}/conf/export_list.txt">Explore/${iics.project.name}.Project</echo>
-    	
+    	<echo level="info">Updated ${basedir}/conf/export_list.txt</echo>
         <echo file="${basedir}/conf/all_exclude_connections.package.txt">Explore/${iics.project.name}/Processes.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/Guides.Folder${line.separator}</echo> 
     	<echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/ProcessObjects.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/Mappings.Folder${line.separator}</echo>
-        <echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/Mapplets.Folder${line.separator}</echo>
-        
+        <echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/Tasks.Folder${line.separator}</echo>
+    	<echo level="info">Updated ${basedir}/conf/all_exclude_connections.package.txt</echo>
     	<echo file="${basedir}/conf/push_dev_test.package.txt">Explore/${iics.project.name}/Processes.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/push_dev_test.package.txt" append="true">Explore/${iics.project.name}/Guides.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/push_dev_test.package.txt" append="true">Explore/${iics.project.name}/ProcessObjects.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/push_dev_test.package.txt" append="true">Explore/${iics.project.name}/Mappings.Folder${line.separator}</echo>
-        <echo file="${basedir}/conf/push_dev_test.package.txt" append="true">Explore/${iics.project.name}/Mapplets.Folder${line.separator}</echo>
-    	
+        <echo file="${basedir}/conf/push_dev_test.package.txt" append="true">Explore/${iics.project.name}/Tasks.Folder${line.separator}</echo>
+    	<echo level="info">Updated ${basedir}/conf/push_dev_test.package.txt</echo>
     	<echo file="${basedir}/conf/push_test_prod.package.txt">Explore/${iics.project.name}/Processes.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/push_test_prod.package.txt" append="true">Explore/${iics.project.name}/Guides.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/push_test_prod.package.txt" append="true">Explore/${iics.project.name}/ProcessObjects.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/push_test_prod.package.txt" append="true">Explore/${iics.project.name}/Mappings.Folder${line.separator}</echo>
-        <echo file="${basedir}/conf/push_test_prod.package.txt" append="true">Explore/${iics.project.name}/Mapplets.Folder${line.separator}</echo>
-    	
+        <echo file="${basedir}/conf/push_test_prod.package.txt" append="true">Explore/${iics.project.name}/Tasks.Folder${line.separator}</echo>
+    	<echo level="info">Updated ${basedir}/conf/push_test_prod.packag.package.txt</echo>
         <propertyfile file="${basedir}/conf/iics.release.properties" >
             <entry key="iics.project.name" value="${iics.project.name}"/>
         	<entry key="iics.customer.name" value="${iics.customer.name}"/>
+        	<entry key="iics.external.properties" value="${iics.local.properties}"/>
         </propertyfile>
+    	<echo level="info">Updated ${basedir}/conf/iics.release.properties</echo>
     	<replace file="${basedir}/.github/workflows/iics_dev_snapshot.yml" token="IICS_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
     	<replace file="${basedir}/.github/workflows/iics_manual_build_deploy.yml" token="IICS_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
     	<replace file="${basedir}/.github/workflows/iics_push_prod.yml" token="IICS_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
     	<replace file="${basedir}/.github/workflows/iics_push_test.yml" token="IICS_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
+    	<echo level="info">Updated ${basedir}/.github/workflows</echo>
     	<replace file="${basedir}/.project" token="iics-project-template" value="${project.parent.dir}"/>
+    	<echo level="info">Updated ${basedir}/.project</echo>
     </target>
 
 
