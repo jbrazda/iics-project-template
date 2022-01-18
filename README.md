@@ -53,7 +53,8 @@ Following is basic guide to use provided scripts and maintain IICS assets in in 
 ```shell
 ant update.src \
 -Diics.release=./conf/iics.release.properties \
--Diics.source.environment=dev
+-Diics.source.environment=dev \
+-Diics.export.list.location=./conf/export_list.txt
 ```
 
 ### Update Sources With cleanup/removal
@@ -71,7 +72,8 @@ ant clean.src -Diics.release=./conf/iics.release.properties
 ant clean.release -Diics.release=./conf/iics.release.properties
 ant update.src \
 -Diics.release=./conf/iics.release.properties \
--Diics.source.environment=dev
+-Diics.source.environment=dev \
+-Diics.export.list.location=./conf/export_list.txt
 ```
 
 Follow by updating the git repository
@@ -108,9 +110,11 @@ ant build.deploy \
 
 ## Setup CI/CD
 
-> TODO Provide CI/CD Setup instructions
+This project is pre configured to use GitHub Workflows to automate version control and release management steps for the IICS.
+
+- [Automation to Build and Deploy IICS Design Packages](https://github.com/jbrazda/icai-ips-bundle/blob/master/doc/build.md)
 
 ## Other Links
 
-- [Automation to Build and Deploy IICS Design Packages](https://github.com/jbrazda/icai-ips-bundle/blob/master/doc/build.md)
 - [Learn Markdown](https://guides.github.com/features/mastering-markdown/)
+- [IICS Naming Conventions](https://github.com/jbrazda/Informatica/blob/master/Guides/InformaticaCloud/naming_conventions.md)

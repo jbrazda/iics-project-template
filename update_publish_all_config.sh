@@ -7,10 +7,10 @@
 # 4. Guides
 # this program must run with GNU sed available install gnu sed on mac via ports or brew
 # Manual Run
-# find ./src/ipd -name "*.AI_SERVICE_CONNECTOR.xml" | gsed -r 's/(\.\/src\/ipd\/)|(\.xml)//g' && \
-# find ./src/ipd -name "*.AI_CONNECTION.xml" | gsed -r 's/(\.\/src\/ipd\/)|(\.xml)//g' && \
-# find ./src/ipd -name "*.PROCESS.xml" | gsed -r 's/(\.\/src\/ipd\/)|(\.xml)//g' && \
-# find ./src/ipd -name "*.GUIDE.xml" | gsed -r 's/(\.\/src\/ipd\/)|(\.xml)//g'\
+# find ./src/iics -name "*.AI_SERVICE_CONNECTOR.xml" | gsed -r 's/(\.\/src\/iics\/)|(\.xml)//g' && \
+# find ./src/iics -name "*.AI_CONNECTION.xml" | gsed -r 's/(\.\/src\/iics\/)|(\.xml)//g' && \
+# find ./src/iics -name "*.PROCESS.xml" | gsed -r 's/(\.\/src\/iics\/)|(\.xml)//g' && \
+# find ./src/iics -name "*.GUIDE.xml" | gsed -r 's/(\.\/src\/iics\/)|(\.xml)//g'\
 
 # check system 
 UNAME=$(uname)
@@ -21,10 +21,10 @@ Darwin*) sed_exec='gsed';;
 esac
 
 
-find ./src/ipd -name "*.AI_SERVICE_CONNECTOR.xml" | "$sed_exec" -r 's/(\.\/src\/ipd\/)|(\.xml)//g' > conf/all_designs.publish.txt && \
-find ./src/ipd -name "*.AI_CONNECTION.xml" | "$sed_exec" -r 's/(\.\/src\/ipd\/)|(\.xml)//g' >> conf/all_designs.publish.txt && \
-find ./src/ipd -name "*.PROCESS.xml" | "$sed_exec" -r 's/(\.\/src\/ipd\/)|(\.xml)//g' >> conf/all_designs.publish.txt && \
-find ./src/ipd -name "*.GUIDE.xml" | "$sed_exec" -r 's/(\.\/src\/ipd\/)|(\.xml)//g' >> conf/all_designs.publish.txt
+find ./src/iics -name "*.AI_SERVICE_CONNECTOR.xml" | "$sed_exec" -r 's/(\.\/src\/iics\/)|(\.xml)//g' > conf/all_designs.publish.txt && \
+find ./src/iics -name "*.AI_CONNECTION.xml" | "$sed_exec" -r 's/(\.\/src\/iics\/)|(\.xml)//g' >> conf/all_designs.publish.txt && \
+find ./src/iics -name "*.PROCESS.xml" | "$sed_exec" -r 's/(\.\/src\/iics\/)|(\.xml)//g' >> conf/all_designs.publish.txt && \
+find ./src/iics -name "*.GUIDE.xml" | "$sed_exec" -r 's/(\.\/src\/iics\/)|(\.xml)//g' >> conf/all_designs.publish.txt
 
 echo 'conf/all_designs.publish.txt Updated'
 

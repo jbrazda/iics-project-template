@@ -117,6 +117,18 @@
                 </and>
             </not>
         </condition>
+    	
+    	<condition property="tools.nzip.installed" value="true" else="false">
+            <available file="${tools.package.nzip}" />
+        </condition>
+
+        <condition property="tools.nzip.install">
+            <not>
+                <and>
+                    <available file="${tools.package.nzip}" />
+                </and>
+            </not>
+        </condition>
 
         <property name="initialized" value="true" />
     </target>
@@ -146,6 +158,7 @@
         <echo level="info">IICS Tool Module Available: ${iics.available}</echo>
         <echo level="info">Reporting Module Available: ${tools.reporting.installed}</echo>
         <echo level="info">Tramsform Module Available: ${tools.transform.installed}</echo>
+    	<echo level="info">NZip Module Available:      ${tools.nzip.installed}</echo>
         <echo level="info">========================================</echo>
         <property name="env.info.displayed" value="true" />
     </target>
@@ -218,7 +231,7 @@
         </unzip>
     </target>
 
-    <target name="install.tools.nzip" depends="-env.info">
+    <target name="install.tools.nzip" depends="-env.info" if="${tools.nzip.install}">
         <echo level="info">Downloading: ${url.download.iics.tools.nzip}</echo>
         <mkdir dir="${iics.tools.dir.nzip}" />
         <get src="${url.download.iics.tools.nzip}" dest="${iics.tools.dir.nzip}" usetimestamp="true" />
@@ -463,7 +476,8 @@
 
     <target name="build.ipd.dist.packages" depends="-env.info,
         -select-release,
-        -load.release.properties" if="iics.release.basename" description="Builds IPD Binary Packages Distribution to pre-defined folder which are available for download in github">
+        -load.release.properties,
+    	-download.iics" if="iics.release.basename" description="Builds IPD Binary Packages Distribution to pre-defined folder which are available for download in github">
         <property name="iics.binaries.dir" location="${basedir}/dist">
         </property>
 
@@ -551,17 +565,36 @@
         <property name="project.dir" location="${basedir}"/>
         <basename property="project.parent.dir" file="${project.dir}"/>
         <input defaultvalue="${project.parent.dir}" message="Provide IICS PojectName:" addproperty="iics.project.name"/>
+    	<input defaultvalue="IICS_HCG_ClientName" message="Provide Client Name:" addproperty="iics.customer.name"/>
         <echo file="${basedir}/conf/all_designs.package.txt">Explore/${iics.project.name}.Project</echo> 
-        <echo file="${basedir}/conf/export_list.txt">Explore/${iics.project.name}.Project</echo> 
+        <echo file="${basedir}/conf/export_list.txt">Explore/${iics.project.name}.Project</echo>
+    	
         <echo file="${basedir}/conf/all_exclude_connections.package.txt">Explore/${iics.project.name}/Processes.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/Guides.Folder${line.separator}</echo> 
-        <echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/ProcessObjects.Folder${line.separator}</echo> 
+    	<echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/ProcessObjects.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/Mappings.Folder${line.separator}</echo>
         <echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/Mapplets.Folder${line.separator}</echo>
-        <echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/Components.Folder${line.separator}</echo>
+        
+    	<echo file="${basedir}/conf/push_dev_test.package.txt">Explore/${iics.project.name}/Processes.Folder${line.separator}</echo> 
+        <echo file="${basedir}/conf/push_dev_test.package.txt" append="true">Explore/${iics.project.name}/Guides.Folder${line.separator}</echo> 
+        <echo file="${basedir}/conf/push_dev_test.package.txt" append="true">Explore/${iics.project.name}/ProcessObjects.Folder${line.separator}</echo> 
+        <echo file="${basedir}/conf/push_dev_test.package.txt" append="true">Explore/${iics.project.name}/Mappings.Folder${line.separator}</echo>
+        <echo file="${basedir}/conf/push_dev_test.package.txt" append="true">Explore/${iics.project.name}/Mapplets.Folder${line.separator}</echo>
+    	
+    	<echo file="${basedir}/conf/push_test_prod.package.txt">Explore/${iics.project.name}/Processes.Folder${line.separator}</echo> 
+        <echo file="${basedir}/conf/push_test_prod.package.txt" append="true">Explore/${iics.project.name}/Guides.Folder${line.separator}</echo> 
+        <echo file="${basedir}/conf/push_test_prod.package.txt" append="true">Explore/${iics.project.name}/ProcessObjects.Folder${line.separator}</echo> 
+        <echo file="${basedir}/conf/push_test_prod.package.txt" append="true">Explore/${iics.project.name}/Mappings.Folder${line.separator}</echo>
+        <echo file="${basedir}/conf/push_test_prod.package.txt" append="true">Explore/${iics.project.name}/Mapplets.Folder${line.separator}</echo>
+    	
         <propertyfile file="${basedir}/conf/iics.release.properties" >
             <entry key="iics.project.name" value="${iics.project.name}"/>
+        	<entry key="iics.customer.name" value="${iics.customer.name}"/>
         </propertyfile>
+    	<replace file="${basedir}/.github/workflows/iics_dev_snapshot.yml" token="IICS_HCG_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
+    	<replace file="${basedir}/.github/workflows/iics_manual_build_deploy.yml" token="IICS_HCG_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
+    	<replace file="${basedir}/.github/workflows/iics_push_prod.yml" token="IICS_HCG_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
+    	<replace file="${basedir}/.github/workflows/iics_push_test.yml" token="IICS_HCG_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
     </target>
 
 
