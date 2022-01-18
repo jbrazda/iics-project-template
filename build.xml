@@ -236,7 +236,8 @@
         <mkdir dir="${iics.tools.dir.nzip}" />
         <get src="${url.download.iics.tools.nzip}" dest="${iics.tools.dir.nzip}" usetimestamp="true" />
     </target>
-
+	
+	
     <target name="-select-release" unless="iics.release">
         <fileset id="available.releases" dir="${basedir}/conf" includes="*.release.properties" />
         <pathconvert property="available.releases.list" refid="available.releases" pathsep="," />
@@ -565,7 +566,7 @@
         <property name="project.dir" location="${basedir}"/>
         <basename property="project.parent.dir" file="${project.dir}"/>
         <input defaultvalue="${project.parent.dir}" message="Provide IICS PojectName:" addproperty="iics.project.name"/>
-    	<input defaultvalue="IICS_HCG_ClientName" message="Provide Client Name:" addproperty="iics.customer.name"/>
+    	<input defaultvalue="IICS_ClientName" message="Provide Client Name:" addproperty="iics.customer.name"/>
         <echo file="${basedir}/conf/all_designs.package.txt">Explore/${iics.project.name}.Project</echo> 
         <echo file="${basedir}/conf/export_list.txt">Explore/${iics.project.name}.Project</echo>
     	
@@ -591,10 +592,11 @@
             <entry key="iics.project.name" value="${iics.project.name}"/>
         	<entry key="iics.customer.name" value="${iics.customer.name}"/>
         </propertyfile>
-    	<replace file="${basedir}/.github/workflows/iics_dev_snapshot.yml" token="IICS_HCG_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
-    	<replace file="${basedir}/.github/workflows/iics_manual_build_deploy.yml" token="IICS_HCG_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
-    	<replace file="${basedir}/.github/workflows/iics_push_prod.yml" token="IICS_HCG_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
-    	<replace file="${basedir}/.github/workflows/iics_push_test.yml" token="IICS_HCG_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
+    	<replace file="${basedir}/.github/workflows/iics_dev_snapshot.yml" token="IICS_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
+    	<replace file="${basedir}/.github/workflows/iics_manual_build_deploy.yml" token="IICS_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
+    	<replace file="${basedir}/.github/workflows/iics_push_prod.yml" token="IICS_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
+    	<replace file="${basedir}/.github/workflows/iics_push_test.yml" token="IICS_ClientName" value="${iics.customer.name}_${iics.project.name}"/>
+    	<replace file="${basedir}/.project" token="iics-project-template" value="${project.parent.dir}"/>
     </target>
 
 
@@ -816,7 +818,6 @@
                     <pathelement location="${iics.tools.dir.nzip}/nzip.jar" />
                 </classpath>
             </java>
-
         </sequential>
     </macrodef>
 
