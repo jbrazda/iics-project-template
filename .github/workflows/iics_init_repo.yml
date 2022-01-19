@@ -38,7 +38,7 @@ on:
         required: true
 
 jobs:
-  dev_commit_snapshot:
+  init_repo:
   #  Export IICS Assets from the environment
     runs-on: ubuntu-latest
     environment: dev
@@ -60,7 +60,7 @@ jobs:
         ant initialize.project \
         -Diics.client.name="${{ github.event.inputs.clientName }}" \
         -Diics.customer.name="${{ github.event.inputs.projectName }}" \
-        -Diics.local.properties="${{ github.event.inputs.localConfig }}" 
+        -Diics.local.properties="'${{ github.event.inputs.localConfig }}'" 
     
     - name: Commit and Push Changes
       uses: actions-x/commit@v2
