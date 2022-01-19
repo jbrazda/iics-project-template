@@ -568,7 +568,7 @@
 	
 	
 	
-	<target name="-set-project-init" unless="iics.project.name">
+	<target name="-set-project-init">
 		<property name="project.dir" location="${basedir}"/>
 		<basename property="project.parent.dir" file="${project.dir}"/>
     </target>

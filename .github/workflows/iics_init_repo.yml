@@ -54,8 +54,8 @@ jobs:
       # Configure baseline configuration files and commit to current branch
       run: |
         ant initialize.project \
-        -Diics.client.name='${{ github.event.inputs.clientName }}' \
-        -Diics.customer.name='${{ github.event.inputs.projectName }}' \
+        -Diics.customer.name='${{ github.event.inputs.clientName }}' \
+        -Diics.project.name='${{ github.event.inputs.projectName }}' \
         -Diics.local.properties='${{ github.event.inputs.localConfig }}' 
     
     - name: Commit and Push Changes
