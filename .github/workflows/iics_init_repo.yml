@@ -50,16 +50,12 @@ jobs:
         distribution: zulu
         java-version: 8
 
-    - name: Export Project and Refresh From Source Org (DEV)
-      env:
-        IICS_SOURCE_ENVIRONMENT: dev
-        IICS_EXPORT_PATH: ./target/iics/export/dev
-        IICS_EXPORT_FILE: IICS_HCG_ClientName
+    - name: Initialize Repository 
       # Configure baseline configuration files and commit to current branch
       run: |
         ant initialize.project \
-        -Diics.client.name="${{ github.event.inputs.clientName }}" \
-        -Diics.customer.name="${{ github.event.inputs.projectName }}" \
+        -Diics.client.name='${{ github.event.inputs.clientName }}' \
+        -Diics.customer.name='${{ github.event.inputs.projectName }}' \
         -Diics.local.properties='${{ github.event.inputs.localConfig }}' 
     
     - name: Commit and Push Changes

@@ -588,10 +588,10 @@
     
     <target name="-set-loal-creds-file" unless="iics.local.properties" depends="-set-project-init">
     	<input defaultvalue="${iics.external.properties.dir}/iics.properties" 
-    		  message="Location ocation of the local Credentials File:" addproperty="iics.local.properties"/>
+    		  message="Location of the local credentials file:" addproperty="iics.local.properties"/>
     </target>
 
-    <target name="inialize.project" 
+    <target name="initialize.project" 
     	description="Generates Initial Configurations for CI/CD scripts after template cloning"
     	depends="-set-project-init,
     	-set-client-name,
