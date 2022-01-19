@@ -131,6 +131,8 @@
         </condition>
 
         <property name="initialized" value="true" />
+    	
+    	
     </target>
 
 
@@ -563,13 +565,42 @@
          iics.import,
          publish" description="Combines package.src, import, publish steps into one step">
     </target>
+	
+	
+	
+	<target name="-set-project-init" unless="iics.project.name">
+		<property name="project.dir" location="${basedir}"/>
+		<basename property="project.parent.dir" file="${project.dir}"/>
+    </target>
+	
+   <target name="-set-client-name" unless="iics.customer.name" depends="-set-project-init">
+        <input defaultvalue="IICS_ClientName" 
+            message="Provide Client (Project Group) Name:" addproperty="iics.customer.name"/>
+        
+    </target>
+	
+	<target name="-set-project-name" unless="iics.project.name" depends="-set-project-init">
+		<input defaultvalue="${project.parent.dir}" 
+			message="Provide IICS PojectName:" addproperty="iics.project.name"/>    
+    </target>
+	
+
     
-    <target name="gen.initial.configs" description="Generates Initial Configurations for CI/CD scripts for provided project name">
-        <property name="project.dir" location="${basedir}"/>
-        <basename property="project.parent.dir" file="${project.dir}"/>
-        <input defaultvalue="${project.parent.dir}" message="Provide IICS PojectName:" addproperty="iics.project.name"/>
-    	<input defaultvalue="IICS_ClientName" message="Provide Client Name:" addproperty="iics.customer.name"/>
-    	<input defaultvalue="${iics.external.properties.dir}/iics.properties" message="Provide location of the Credentials File:" addproperty="iics.local.properties"/>
+    <target name="-set-loal-creds-file" unless="iics.local.properties" depends="-set-project-init">
+    	<input defaultvalue="${iics.external.properties.dir}/iics.properties" 
+    		  message="Location ocation of the local Credentials File:" addproperty="iics.local.properties"/>
+    </target>
+
+    <target name="inialize.project" 
+    	description="Generates Initial Configurations for CI/CD scripts after template cloning"
+    	depends="-set-project-init,
+    	-set-client-name,
+    	-set-project-name,
+    	-set-loal-creds-file">
+        
+    	<echo level="info">Client Name:  ${iics.customer.name}</echo>
+    	<echo level="info">Project Name: ${iics.project.name}</echo>
+    	<echo level="info">Local Creds:  ${iics.local.properties}</echo>
         
           
     	<echo file="${basedir}/conf/all_designs.package.txt">Explore/${iics.project.name}.Project</echo> 

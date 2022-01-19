@@ -1,0 +1,70 @@
+# This is a basic workflow that is manually triggered
+
+name: Initialize Repository
+
+# Configures baseline set of Configuration Files after cloning this repository from template
+
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      commitMessage:
+        # Custom commit message for commit snapshot
+        description: 'Commit Message'
+        # Default value if no value is explicitly provided
+        default: 'Initial Repository Configuration'
+        # Input has to be provided for the workflow to run
+        required: true
+      clientName:
+        # Client Name or Project Group Name
+        description: 'Client Name (Project Group)'
+        # Default value if no value is explicitly provided
+        default: 'IICS_ClientName'
+        # Input has to be provided for the workflow to run
+        required: true
+      projectName:
+        # Project Name must match the IICS Project Name
+        description: 'IICS Project Name'
+        # Default value if no value is explicitly provided
+        default: 'Tools'
+        # Input has to be provided for the workflow to run
+        required: true
+      localConfig:
+        # Custom commit message for commit snapshot
+        description: 'Location of the local credentials file'
+        # Default value if no value is explicitly provided
+        default: '${iics.external.properties.dir}/iics.properties'
+        # Input has to be provided for the workflow to run
+        required: true
+
+jobs:
+  dev_commit_snapshot:
+  #  Export IICS Assets from the environment
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2.5.0
+      with:
+        distribution: zulu
+        java-version: 8
+
+    - name: Export Project and Refresh From Source Org (DEV)
+      env:
+        IICS_SOURCE_ENVIRONMENT: dev
+        IICS_EXPORT_PATH: ./target/iics/export/dev
+        IICS_EXPORT_FILE: IICS_HCG_ClientName
+      # Configure baseline configuration files and commit to current branch
+      run: |
+        ant initialize.project \
+        -Diics.client.name="${{ github.event.inputs.clientName }}" \
+        -Diics.customer.name="${{ github.event.inputs.projectName }}" \
+        -Diics.local.properties="${{ github.event.inputs.localConfig }}" 
+    
+    - name: Commit and Push Changes
+      uses: actions-x/commit@v2
+      with:
+        message: ${{ github.event.inputs.commitMessage }}
+        branch: dev
+        files: .
