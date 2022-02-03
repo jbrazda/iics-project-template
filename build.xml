@@ -227,7 +227,7 @@
         <echo level="info">Downloading: ${url.download.iics.tools.reporting}</echo>
         <mkdir dir="${iics.tools.dir.reporting}" />
         <mkdir dir="${tools.download.dir}" />
-        <get src="${url.download.iics.tools.reporting}" dest="${tools.download.dir}" usetimestamp="true" />
+        <get src="${url.download.iics.tools.reporting}" dest="${tools.download.dir}/${url.download.iics.tools.reporting.archive}" usetimestamp="true" />
         <unzip dest="${iics.tools.dir.reporting}" src="${tools.download.dir}/${url.download.iics.tools.reporting.archive}">
             <mapper>
                 <cutdirsmapper dirs="1" />
