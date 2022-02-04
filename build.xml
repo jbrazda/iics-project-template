@@ -131,8 +131,6 @@
         </condition>
 
         <property name="initialized" value="true" />
-    	
-    	
     </target>
 
 
@@ -170,15 +168,13 @@
         <echo level="info">This ant script provides set of scripts to manage and release IICS Assetst</echo>
         <echo level="info">Read the doc/README.MD for more details</echo>
         <echo level="info">use ant -projecthelp to see available targets</echo>
-        <property name="help.file" value="${basedir}/README.md" />
-        <echo level="info">${shell.open} ${help.file}</echo>
+        <property name="help.file" location="${basedir}/README.html" />
+    	<echo level="info">${shell} ${shell.options} ${shell.open} "${help.file}"</echo>
         <exec executable="${shell}" spawn="yes">
             <arg value="${shell.options}" />
-            <arg line="'${shell.open} ${help.file}'" />
+        	<arg line="'${shell.open} ${help.file}'" />
         </exec>
     </target>
-
-
 
     <target name="-download.iics" depends="-env.info" unless="${iics.available}">
         <!-- Download OS Specific version of the tool-->
@@ -240,8 +236,7 @@
         <mkdir dir="${iics.tools.dir.nzip}" />
         <get src="${url.download.iics.tools.nzip}" dest="${iics.tools.dir.nzip}" usetimestamp="true" />
     </target>
-	
-	
+
     <target name="-select-release" unless="iics.release">
         <fileset id="available.releases" dir="${basedir}/conf" includes="*.release.properties" />
         <pathconvert property="available.releases.list" refid="available.releases" pathsep="," />
@@ -481,18 +476,20 @@
 
     <target name="build.ipd.dist.packages" depends="-env.info,
         -select-release,
+        -download.iics,
         -load.release.properties,
-    	-download.iics" if="iics.release.basename" description="Builds IPD Binary Packages Distribution to pre-defined folder which are available for download in github">
-        <property name="iics.binaries.dir" location="${basedir}/dist">
-        </property>
-
-        <iics.package id="initial_release" workspace="${iics.extract.dir}" output="${iics.package.output}_InitialInstall_All_Designs.zip" todir="${iics.binaries.dir}" file="${basedir}/conf/all_designs.package.txt" />
+        install.tools.nzip,
+        -copy.designs.transform,
+        iics.prepare.package" if="iics.release.basename" description="Builds IPD Binary Packages Distribution to pre-defined folder which are available for download in github">
+        
+        <property name="iics.binaries.dir" location="${basedir}/target/dist"/>
+        <property name="iics.binaries.dir.location" location="${iics.binaries.dir}"/>   
+        <mkdir dir="${iics.binaries.dir.location}"/>
+        <iics.package id="initial_release" workspace="${transform.src.folder}" output="${iics.package.output}_InitialInstall_All_Designs.zip" todir="${iics.binaries.dir.location}" file="${basedir}/conf/all_designs.package.txt" />
         <echo level="info">Updated All Designs distribution in ${iics.binaries.dir}/${iics.package.output}_InitialInstall_All_Designs.zip</echo>
-        <iics.package id="update_release" workspace="${iics.extract.dir}" output="${iics.package.output}_Update_Excluding_Connections.zip" todir="${iics.binaries.dir}" file="${basedir}/conf/all_exclude_connections.package.txt" />
+        <iics.package id="update_release" workspace="${transform.src.folder}" output="${iics.package.output}_Update_Excluding_Connections.zip" todir="${iics.binaries.dir.location}" file="${basedir}/conf/all_exclude_connections.package.txt" />
         <echo level="info">Updated Update Designs distribution in ${iics.binaries.dir}/${iics.package.output}_Update_Excluding_Connections.zip</echo>
     </target>
-
-
 
     <target name="-set-export-report-properties">
         <property name="iics.report.name" value="${iics.package.output}" />
@@ -586,27 +583,12 @@
 	
 
     
-    <target name="-set-loal-creds-file" unless="iics.local.properties" depends="-set-project-init">
-    	<input defaultvalue="${iics.external.properties.dir}/iics.properties" 
-    		  message="Location of the local credentials file:" addproperty="iics.local.properties"/>
-    </target>
-
-    <target name="initialize.project" 
-    	description="Generates Initial Configurations for CI/CD scripts after template cloning"
-    	depends="-set-project-init,
-    	-set-client-name,
-    	-set-project-name,
-    	-set-loal-creds-file">
-        
-    	<echo level="info">Client Name:  ${iics.customer.name}</echo>
-    	<echo level="info">Project Name: ${iics.project.name}</echo>
-    	<echo level="info">Local Creds:  ${iics.local.properties}</echo>
-        
-          
-    	<echo file="${basedir}/conf/all_designs.package.txt">Explore/${iics.project.name}.Project</echo> 
-    	<echo level="info">Updated ${basedir}/conf/all_designs.package.txt</echo> 
-        <echo file="${basedir}/conf/export_list.txt">Explore/${iics.project.name}.Project</echo>
-    	<echo level="info">Updated ${basedir}/conf/export_list.txt</echo>
+    <target name="gen.initial.configs" description="Generates Initial Configurations for CI/CD scripts for provided project name">
+        <property name="project.dir" location="${basedir}"/>
+        <basename property="project.parent.dir" file="${project.dir}"/>
+        <input defaultvalue="${project.parent.dir}" message="Provide IICS PojectName:" addproperty="iics.project.name"/>
+        <echo file="${basedir}/conf/all_designs.package.txt">Explore/${iics.project.name}.Project</echo> 
+        <echo file="${basedir}/conf/export_list.txt">Explore/${iics.project.name}.Project</echo> 
         <echo file="${basedir}/conf/all_exclude_connections.package.txt">Explore/${iics.project.name}/Processes.Folder${line.separator}</echo> 
         <echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/Guides.Folder${line.separator}</echo> 
     	<echo file="${basedir}/conf/all_exclude_connections.package.txt" append="true">Explore/${iics.project.name}/ProcessObjects.Folder${line.separator}</echo> 
