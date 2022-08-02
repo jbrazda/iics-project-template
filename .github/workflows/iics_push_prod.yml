@@ -40,7 +40,7 @@ jobs:
       AWS_S3_BUCKET: "s3://infa.cloud.in/hcg"
     ## DO NOT EDIT STEPS BELOW UNLESS YOU WANT TO CHANGE THOSE, USE ENV VARIABLES ABOVE CONFIGURE THE BUILD
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up JDK 1.8
       uses: actions/setup-java@v2.5.0
       with:
