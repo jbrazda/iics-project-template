@@ -3,16 +3,16 @@
 <!-- TOC -->
 
 - [README](#readme)
-  - [Overview](#overview)
-  - [Contacts](#contacts)
-  - [Links](#links)
-  - [Manual Updates of Source Code in this repo](#manual-updates-of-source-code-in-this-repo)
-    - [Update Sources](#update-sources)
-    - [Update Sources With cleanup/removal](#update-sources-with-cleanupremoval)
-  - [Package Only and Inspect output (to PROD)](#package-only-and-inspect-output-to-prod)
-    - [Build And Deploy to PROD](#build-and-deploy-to-prod)
-  - [Setup CI/CD](#setup-cicd)
-  - [Other Links](#other-links)
+    - [Overview](#overview)
+    - [Contacts](#contacts)
+    - [Links](#links)
+    - [Manual Updates of Source Code in this repo](#manual-updates-of-source-code-in-this-repo)
+        - [Update Sources](#update-sources)
+        - [Update Sources With cleanup/removal](#update-sources-with-cleanupremoval)
+    - [Package Only and Inspect output (to PROD)](#package-only-and-inspect-output-to-prod)
+        - [Build And Deploy to PROD](#build-and-deploy-to-prod)
+    - [Setup CI/CD](#setup-cicd)
+    - [Other Links](#other-links)
 
 <!-- /TOC -->
 
@@ -68,9 +68,7 @@ git pull --rebase
 This scrip will clean project target working directory and refresh sources  using a default project configuration while also removing any deleted assets from git repository
 
 ```shell
-ant clean.src -Diics.release=./conf/iics.release.properties
-ant clean.release -Diics.release=./conf/iics.release.properties
-ant update.src \
+ant clean.src clean.target update.src \
 -Diics.release=./conf/iics.release.properties \
 -Diics.source.environment=dev \
 -Diics.export.list.location=./conf/export_list.txt
@@ -95,7 +93,7 @@ ant package.src \
 
 ### Build And Deploy to PROD
 
-Regular update of previously deployed assets (Only hcim project)
+Regular update of previously deployed assets
 
 ```shell
 ant build.deploy \
